@@ -4,7 +4,7 @@ import { useRef } from 'react';
 const TodoForm = ({ onAddTodo }) => {
   const inputRef = useRef();
 
-  const handledAddTodo = (event) => {
+  const handleAddTodo = (event) => {
     event.preventDefault();
     
   const todoTitle = event.target.todoTitle.value.trim();
@@ -17,7 +17,7 @@ const TodoForm = ({ onAddTodo }) => {
  
   }
   return (
-   <form onSubmit={handledAddTodo}>
+   <form onSubmit={handleAddTodo}>
       <label htmlFor="todoTitle">Todo</label>
       <input 
         ref={inputRef}
