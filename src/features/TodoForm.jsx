@@ -29,7 +29,6 @@ const TodoForm = ({ onAddTodo } ) => {
       onChange={handleTitleChange}
       ref={inputRef}
     />
-      <label htmlFor="todoTitle">Todo</label>
   
     <button disabled={!isValidTodoTitle(workingTodoTitle)}>Add Todo</button>    </form>
   )
