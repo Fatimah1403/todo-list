@@ -1,4 +1,7 @@
 import { useRef, useState } from 'react';
+import TextInputWithLabel from '../shared/TextInputWithLabel';
+import { isValidTodoTitle } from '../utils/todoValidation';
+
 
 
 const TodoForm = ({ onAddTodo } ) => {
@@ -12,21 +15,23 @@ const TodoForm = ({ onAddTodo } ) => {
     inputRef.current.focus();
   }
 
+  const handleTitleChange = (event) => {
+  setWorkingTodoTitle(event.target.value);
+};
  
   
   return (
    <form onSubmit={handleAddTodo}>
+    <TextInputWithLabel
+      elementId="todoTitle"
+      labelText="Todo"
+      value={workingTodoTitle}
+      onChange={handleTitleChange}
+      ref={inputRef}
+    />
       <label htmlFor="todoTitle">Todo</label>
-      <input 
-        ref={inputRef}
-        value={workingTodoTitle }
-        type="text" id="todoTitle"
-        onChange={(e) => setWorkingTodoTitle(e.target.value)}
-        name="todoTitle"
-        placeholder={'Todo text'}
-      />
-      <button type="submit" disabled={!workingTodoTitle.trim()} >Add Todo</button>
-    </form>
+  
+    <button disabled={!isValidTodoTitle(workingTodoTitle)}>Add Todo</button>    </form>
   )
 }
 
