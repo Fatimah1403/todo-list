@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css'
 import TodoList from './features/TodoList/TodoList';
-import TodoForm from  './features/TodoForm';
+import TodoForm from  './features/TodoList/TodoForm';
 
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
   function updateTodo(editedTodo) {
     const updatedTodos = todoList.map(todo => {
       if (todo.id === editedTodo.id) {
-        return editedTodo;
+        return { ...todo, title: editedTodo.title };
       }
       return todo;
     });

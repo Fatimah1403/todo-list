@@ -1,10 +1,10 @@
 
 const TextInputWithLabel = ({
-    elementId,
-    labelText,
-    onChange,
-    ref,
-    value,
+  elementId,
+  labelText,
+  value,
+  onChange,
+  inputRef,
 }) => {
   return (
     <>
@@ -14,7 +14,7 @@ const TextInputWithLabel = ({
                 id={elementId}
                 value={value}
                 onChange={onChange}
-                ref={ref}
+                ref={inputRef}
         />
     </>
         

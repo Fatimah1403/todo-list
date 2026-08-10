@@ -15,9 +15,9 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
 const handleCancel = cancelEdit;
 const handleEdit = (event) => updateTitle(event.target.value);
 
-const handleUpdate = (event) => {
+const handleUpdate = (event) => {   
+  event.preventDefault();
   if (!isEditing) return;
-    event.preventDefault();
     const finalTitle = finishEdit();
 
   onUpdateTodo({ ...todo, title: finalTitle });
@@ -34,13 +34,12 @@ return (
               value={workingTitle} 
               onChange={handleEdit}
             />
-            < button 
+            <button 
               type="button" 
               onClick={handleCancel}>
                 Cancel
             </button>
             <button 
-              text="Update"
               type="button" 
               onClick={handleUpdate}
               disabled={!isValidTodoTitle(workingTitle)}
