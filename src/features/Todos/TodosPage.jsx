@@ -59,7 +59,11 @@ const TodosPage = ({ token }) => {
       }
 
       const data = await response.json();
-      setTodoList(previous => previous.map(todo => todo.id === newTodo.id ? data.task : todo));
+      console.log('Add todo response:', data);
+
+     const savedTodo = data.task || data;
+
+      setTodoList(previous => previous.map(todo => todo.id === newTodo.id ? savedTodo : todo));
 
     } catch (error) {
       setTodoList(previous => previous.filter(todo => todo.id !== newTodo.id));
