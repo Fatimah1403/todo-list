@@ -52,7 +52,7 @@ const TodosPage = ({ token }) => {
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
-        body: JSON.stringify({ title: todoTitle }),
+        body: JSON.stringify({ title: todoTitle, isCompleted: false }),
       });
       if (!response.ok) {
         throw new Error('Failed to add todo');
@@ -61,7 +61,7 @@ const TodosPage = ({ token }) => {
       const data = await response.json();
       console.log('Add todo response:', data);
 
-     const savedTodo = data.task || data;
+     const savedTodo = data.task ?? data;
 
       setTodoList(previous => previous.map(todo => todo.id === newTodo.id ? savedTodo : todo));
 
@@ -103,7 +103,7 @@ const TodosPage = ({ token }) => {
     const originalTodo = todoList.find(todo => todo.id === editedTodo.id);
     setTodoList(previous => 
       previous.map(todo => 
-        todo.id === editedTodo.id ? { ...todo, title: editedTodo.title } : todo)
+        todo.id === editedTodo.id ? { ...todo,  editedTodo } : todo)
     );
 
     try {

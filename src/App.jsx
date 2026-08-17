@@ -1,7 +1,7 @@
 import Header from './shared/Header';
 import TodosPage from './features/Todos/TodosPage';
 import { useState } from 'react';
-import Logon from './features/logon';
+import Logon from './features/Logon';
 import './App.css';
 
 function App() {
@@ -10,11 +10,8 @@ function App() {
 
   return (
     <div>
-     <Header
-      token={token}
-      onSetEmail={setEmail}
-      onSetToken={setToken}
-    />
+     <Header/>
+     
     {token ? (
       <TodosPage token={token} />
     ) : (
