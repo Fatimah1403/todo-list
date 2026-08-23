@@ -168,9 +168,17 @@ const TodosPage = ({ token }) => {
   }
   return (
    <div>
-      {filterError && (
+      {error && (
         <div>
           <p style={{ color: 'red' }}>{error}</p>
+          <button onClick={() => setError('')}>
+            Clear Error
+          </button>
+        </div>
+     )}
+      {filterError && (
+        <div>
+          <p style={{ color: 'red' }}>{filterError}</p>
           <button onClick={() => setFilterError('')}>
             Clear Filter Error
           </button>
