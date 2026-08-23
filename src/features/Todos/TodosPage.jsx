@@ -34,12 +34,15 @@ const TodosPage = ({ token }) => {
         const paramsObject = {
         sortBy,
         sortDirection,
-        limit: 100,
+       
 
       };
         if (debouncedFilterTerm) {
           paramsObject.find = debouncedFilterTerm;
         }
+        paramsObject.limit = 100;
+
+
         const params = new URLSearchParams(paramsObject);
         const response = await fetch(`/api/tasks?${params}`, {
           headers: {
@@ -55,6 +58,7 @@ const TodosPage = ({ token }) => {
         }
         const data = await response.json();
         setTodoList(data.tasks);
+        
         setFilterError('');
         setError('')
       } catch (error) {
