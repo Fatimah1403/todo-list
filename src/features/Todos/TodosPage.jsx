@@ -18,6 +18,8 @@ const TodosPage = ({ token }) => {
   const [filterError, setFilterError] = useState("")
 
  const invalidateCache = useCallback(() => {
+    console.log('Invalidating memo cache after todo mutation');
+
     setDataVersion(prev => prev + 1);
   }, []);
 
@@ -27,6 +29,7 @@ const TodosPage = ({ token }) => {
     const fetchTodos = async () => {
       setIsTodoListLoading(true);
       setError("");
+       setFilterError("");
       try {
         const paramsObject = {
         sortBy,
@@ -53,6 +56,7 @@ const TodosPage = ({ token }) => {
         const data = await response.json();
         setTodoList(data.tasks);
         setFilterError('');
+        setError('')
       } catch (error) {
         if (
           debouncedFilterTerm ||
@@ -62,6 +66,7 @@ const TodosPage = ({ token }) => {
           setFilterError(`Error filtering/sorting todos: ${error.message}`);
         } else {
           setError(`Error fetching todos: ${error.message}`);
+          setFilterError('');
         }
       } finally {
         setIsTodoListLoading(false);
