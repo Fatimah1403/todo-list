@@ -48,30 +48,38 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    if (!token) {
-      setEmail('');
-      setToken('');
-      return { success: true };
-    }
+  if (!token) {
+    setEmail('');
+    setToken('');
+    return { success: true };
+  }
 
-    try {
-      await fetch('/api/users/logoff', {
+  let apiSuccess = true; // track whether API call succeeded
+
+  try {
+        const response = await fetch('/api/users/logoff', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
-      });
+        });
+        if (!response.ok) {
+        apiSuccess = false;
+        }
     } catch (error) {
-      console.error('Logout API error:', error);
+        console.error('Logout API error:', error);
+        apiSuccess = false;
     } finally {
-      setEmail('');
-      setToken('');
+        setEmail('');
+        setToken('');
     }
 
-    return { success: true };
-  };
+    return apiSuccess
+        ? { success: true }
+        : { success: false, error: 'Logout API call failed, but local session cleared' };
+    };
 
   const value = {
     email,

@@ -64,7 +64,7 @@ const TodosPage = () => {
         const isFilterError = !!(
           debouncedFilterTerm ||
           sortBy !== 'createdAt' ||
-          sortDirection !== 'desc'
+          sortDirection !== 'asc'
         );
 
         dispatch({
