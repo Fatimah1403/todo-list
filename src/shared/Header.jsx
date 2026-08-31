@@ -4,7 +4,11 @@ const Header = () => {
     const { isAuthenticated, logout, email } = useAuth();
 
     const handleLogout = async () => {
-      await logout();
+      const result = await logout();
+      if (!result.success) {
+        alert(`Note: ${result.error}`)
+      }
+
     
     };
 

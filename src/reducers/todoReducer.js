@@ -34,9 +34,10 @@ export const initialTodoState = {
   filterError: '',
   isTodoListLoading: true,
   sortBy: 'createdAt',
-  sortDirection: 'asc',
+  sortDirection: 'desc',
   filterTerm: '',
   dataVersion: 0,
+  originalTodo: null,
 };
 
 export function todoReducer(state, action) {
@@ -105,6 +106,7 @@ export function todoReducer(state, action) {
       return {
         ...state,
         error: '',
+        originalTodo: state.todoList.find(todo => todo.id === action.payload.id) || null,
         todoList: state.todoList.map(todo =>
           todo.id === action.payload.id
             ? { ...todo, isCompleted: true }
@@ -116,6 +118,7 @@ export function todoReducer(state, action) {
       return {
         ...state,
         dataVersion: state.dataVersion + 1,
+        originalTodo: null,
       };
 
     case TODO_ACTIONS.COMPLETE_TODO_ERROR:
@@ -123,6 +126,7 @@ export function todoReducer(state, action) {
       return {
         ...state,
         error: action.payload.message,
+        originalTodo: null,
         todoList: state.todoList.map(todo =>
           todo.id === action.payload.originalTodo.id
             ? action.payload.originalTodo
@@ -136,6 +140,9 @@ export function todoReducer(state, action) {
       return {
         ...state,
         error: '',
+        originalTodo: state.todoList.find(
+            todo => todo.id === action.payload.editedTodo.id
+            ) || null,
         todoList: state.todoList.map(todo =>
           todo.id === action.payload.editedTodo.id
             ? { ...todo, ...action.payload.editedTodo }
@@ -147,11 +154,13 @@ export function todoReducer(state, action) {
       return {
         ...state,
         dataVersion: state.dataVersion + 1,
+        originalTodo: null,
       };
 
     case TODO_ACTIONS.UPDATE_TODO_ERROR:
       return {
         ...state,
+        originalTodo: null,
         error: action.payload.message,
         todoList: state.todoList.map(todo =>
           todo.id === action.payload.originalTodo.id
@@ -191,7 +200,7 @@ export function todoReducer(state, action) {
         ...state,
         filterTerm: '',
         sortBy: 'createdAt',
-        sortDirection: 'asc',
+        sortDirection: 'desc',
         filterError: '',
       };
 
