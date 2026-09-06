@@ -5,6 +5,9 @@ import SortBy from '../shared/SortBy';
 import FilterInput from '../shared/FilterInput';
 import useDebounce from '../utils/useDebounce';
 import { useAuth } from '../contexts/AuthContext';
+import { useSearchParams } from 'react-router';
+import StatusFilter from '../shared/StatusFilter';
+
 import {
   todoReducer,
   initialTodoState,
@@ -13,8 +16,11 @@ import {
 
 const TodosPage = () => {
   const { token } = useAuth();
+  const [searchParams] = useSearchParams();
   
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+   const statusFilter = searchParams.get('status') || 'all';
+
 
   
   const {
@@ -222,6 +228,7 @@ const TodosPage = () => {
           })
         }
       />
+      <StatusFilter />
 
       <FilterInput
         filterTerm={filterTerm}
@@ -240,6 +247,7 @@ const TodosPage = () => {
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
+import Navigation from './Navigation';
 
 const Header = () => {
     const { isAuthenticated, logout, email } = useAuth();
@@ -15,6 +16,7 @@ const Header = () => {
   return (
     <header>
       <h1>Todo List</h1>
+      <Navigation />
       {isAuthenticated && (
         <div>
           <span>Welcome, {email}</span>
