@@ -11,62 +11,88 @@ function ProfilePage() {
   });
 
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!token) return;
+    useEffect(() => {
+        async function fetchTodoStats() {
+            if (!token) return;
 
-    const fetchTodoStats = async () => {
-      try {
-        const response = await fetch('/api/tasks?limit=100', {
-          headers: {
-            'X-CSRF-TOKEN': token,
-          },
-          credentials: 'include',
-        });
+            try {
+            setLoading(true);
+            setError('');
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch todo statistics');
+            const options = {
+                method: 'GET',
+                headers: { 'X-CSRF-TOKEN': token },
+                credentials: 'include',
+            };
+
+            const response = await fetch('/api/tasks', options);
+
+            if (response.status === 401) {
+                throw new Error('Unauthorized');
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch todos');
+            }
+
+            const data = await response.json();
+            const todos = data.tasks;
+
+
+            // Calculate statistics
+            const total = todos.length;
+            const completed = todos.filter((todo) => todo.isCompleted).length;
+            const active = total - completed;
+
+            setStats({ total, completed, active });
+            } catch (err) {
+            setError(`Error loading statistics: ${err.message}`);
+            } finally {
+            setLoading(false);
+            }
         }
 
-        const data = await response.json();
-        const todos = data.tasks;
+        fetchTodoStats();
+    }, [token]);
 
-        const completed = todos.filter(
-          (todo) => todo.isCompleted
-        ).length;
+    const completionPercentage =
+        stats.total > 0
+            ? Math.round((stats.completed / stats.total) * 100)
+            : 0;
+    return (
+        <div>
+            <h2>Profile</h2>
 
-        const total = todos.length;
-        const active = total - completed;
+            <p>User: {email}</p>
+            <section>
+                <h3>Account Information</h3>
+                <p>Name: {email}</p>
+                <p>Status: Authenticated</p>
+            </section>
 
-        setStats({
-          total,
-          completed,
-          active,
-        });
-      } catch (error) {
-        setError(error.message);
-      }
-    };
+            <section>
+                <h3>Todo Statistics</h3>
 
-    fetchTodoStats();
-  }, [token]);
+                {loading ? (
+                    <p>Loading statistics...</p>
+                ) : error ? (
+                    <p style={{ color: 'red' }}>{error}</p>
+                ) : (
+                    <>
+                        <p>Total Todos: {stats.total}</p>
+                        <p>Completed Todos: {stats.completed}</p>
+                        <p>Active Todos: {stats.active}</p>
 
-  return (
-    <div>
-      <h2>Profile</h2>
-
-      <p>User: {email}</p>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <section>
-        <h3>Todo Statistics</h3>
-        <p>Total Todos: {stats.total}</p>
-        <p>Completed Todos: {stats.completed}</p>
-        <p>Active Todos: {stats.active}</p>
-      </section>
-    </div>
-  );
+                        {stats.total > 0 && (
+                            <p>Completion: {completionPercentage}%</p>
+                        )}
+                    </>
+                )}
+            </section>
+        </div>
+    );
 }
 
 export default ProfilePage;
