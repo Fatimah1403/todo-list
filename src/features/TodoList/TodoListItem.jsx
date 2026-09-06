@@ -16,8 +16,9 @@ const handleCancel = cancelEdit;
 const handleEdit = (event) => updateTitle(event.target.value);
 
 const handleUpdate = (event) => {   
-  event.preventDefault();
   if (!isEditing) return;
+    event.preventDefault();
+
     const finalTitle = finishEdit();
 
   onUpdateTodo({ ...todo, title: finalTitle });
