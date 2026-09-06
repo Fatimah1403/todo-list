@@ -17,7 +17,7 @@ function RequireAuth({ children }) {
   }, [isAuthenticated, navigate, location]);
 
   if (!isAuthenticated) {
-    return <p>Redirecting to login...</p>;
+    return <p>Redirecting...</p>;
   }
 
   return children;

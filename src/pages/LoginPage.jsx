@@ -32,7 +32,12 @@ function LoginPage() {
     const result = await login(userEmail, password);
     if (!result.success) {
       setAuthError(result.error);
+      setIsLoggingOn(false);
+      return;
+
     }
+    setIsLoggingOn(false);
+    
   }
   
    return (

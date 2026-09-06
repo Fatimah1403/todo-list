@@ -1,18 +1,11 @@
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from './Navigation';
+import Logoff from '../features/Logoff';
 
 const Header = () => {
-    const { isAuthenticated, logout, email } = useAuth();
-
-    const handleLogout = async () => {
-      const result = await logout();
-      if (!result.success) {
-        alert(`Note: ${result.error}`)
-      }
+    const { isAuthenticated, email } = useAuth();
 
     
-    };
-
   return (
     <header>
       <h1>Todo List</h1>
@@ -20,7 +13,8 @@ const Header = () => {
       {isAuthenticated && (
         <div>
           <span>Welcome, {email}</span>
-          <button onClick={handleLogout}>Log Out</button>
+          
+          <Logoff/>
         </div>
       )}
     </header>
