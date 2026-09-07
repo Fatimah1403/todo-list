@@ -19,7 +19,6 @@ function App() {
       <Header />
 
       <Routes>
-        {/* Routes will go here */}
         <Route path='/' element={<HomePage />} />
         <Route path='/about' element={<AboutPage />} />
         <Route path='/login' element={<LoginPage />} />

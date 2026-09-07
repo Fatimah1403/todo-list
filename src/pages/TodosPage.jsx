@@ -85,7 +85,7 @@ const TodosPage = () => {
     }
 
     fetchTodos();
-  }, [token, sortBy, sortDirection, debouncedFilterTerm], statusFilter);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm, statusFilter]);
 
   async function addTodo(todoTitle) {
     const tempTodo = { id: Date.now(), title: todoTitle, isCompleted: false };

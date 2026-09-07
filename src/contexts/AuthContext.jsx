@@ -16,8 +16,8 @@ export function AuthProvider({ children }) {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [name, setName] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  
   const login = async (userEmail, password) => {
     try {
       const options = {
@@ -55,6 +55,7 @@ export function AuthProvider({ children }) {
   if (!token) {
     setEmail('');
     setToken('');
+    setName('');
     return { success: true };
   }
 
@@ -78,6 +79,8 @@ export function AuthProvider({ children }) {
     } finally {
         setEmail('');
         setToken('');
+        setName('');
+        setIsAuthenticated(false);
     }
 
     return apiSuccess
