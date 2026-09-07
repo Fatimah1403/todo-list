@@ -1,6 +1,8 @@
 import { Link } from 'react-router';
 
 function NotFoundPage() {
+   
+
   return (
     <div>
       <h2>404 - Page Not Found</h2>
@@ -11,8 +13,6 @@ function NotFoundPage() {
 
       <nav>
         <Link to="/">Home</Link>
-        {' | '}
-        <Link to="/todos">Todos</Link>
         {' | '}
         <Link to="/about">About</Link>
       </nav>

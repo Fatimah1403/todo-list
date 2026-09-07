@@ -8,21 +8,21 @@ const Logon = () => {
   const [authError, setAuthError] = useState('');
   const [isLoggingOn, setIsLoggingOn] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  async function handleSubmit(e) {
+    e.preventDefault();
     setIsLoggingOn(true);
     setAuthError('');
 
-   
     const result = await login(userEmail, password);
-
     if (!result.success) {
       setAuthError(result.error);
+      setIsLoggingOn(false);
+      return;
+
     }
-
     setIsLoggingOn(false);
-  };
-
+    
+  }
   return (
     <div>
       {authError && <p style={{ color: 'red' }}>{authError}</p>}

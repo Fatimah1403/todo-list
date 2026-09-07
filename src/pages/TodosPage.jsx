@@ -19,8 +19,7 @@ const TodosPage = () => {
   const [searchParams] = useSearchParams();
   
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-   const statusFilter = searchParams.get('status') || 'all';
-
+  const statusFilter = searchParams.get('status') || 'all';
 
   
   const {
@@ -83,10 +82,10 @@ const TodosPage = () => {
           },
         });
       }
-    };
+    }
 
     fetchTodos();
-  }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm], statusFilter);
 
   async function addTodo(todoTitle) {
     const tempTodo = { id: Date.now(), title: todoTitle, isCompleted: false };
