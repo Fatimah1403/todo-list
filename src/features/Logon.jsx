@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate, useLocation } from 'react-router';
+
 
 const Logon = () => {
   const { login } = useAuth();
@@ -7,6 +9,20 @@ const Logon = () => {
   const [userEmail, setUserEmail] = useState('');
   const [authError, setAuthError] = useState('');
   const [isLoggingOn, setIsLoggingOn] = useState(false);
+
+  const {  isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+ 
+
+  const from = location.state?.from?.pathname || '/todos';
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
 
   async function handleSubmit(e) {
     e.preventDefault();

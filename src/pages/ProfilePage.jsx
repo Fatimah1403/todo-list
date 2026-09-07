@@ -38,12 +38,12 @@ function ProfilePage() {
             }
 
             const data = await response.json();
-            const todos = data?.tasks;
+            const todos = data?.tasks??[];
 
 
             // Calculate statistics
-            const total = todos.length;
-            const completed = todos.filter((todo) => todo.isCompleted).length;
+            const total = todos?.length;
+            const completed = todos?.filter((todo) => todo.isCompleted)?.length;
             const active = total - completed;
 
             setStats({ total, completed, active });
