@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import TodoList from './TodoList/TodoList';  
-import TodoForm from './TodoForm';  
+import { useState, useEffect } from "react";
+import TodoList from "./TodoList/TodoList";
+import TodoForm from "./TodoForm";
 const TodosPage = ({ token }) => {
-  const [todoList, setTodoList] = useState([])
+  const [todoList, setTodoList] = useState([]);
   const [error, setError] = useState("");
   const [isTodoListLoading, setIsTodoListLoading] = useState(false);
 
@@ -18,15 +18,15 @@ const TodosPage = ({ token }) => {
         });
         const response = await fetch(`/api/tasks?${params}`, {
           headers: {
-            'X-CSRF-TOKEN': token,
+            "X-CSRF-TOKEN": token,
           },
-          credentials: 'include',
+          credentials: "include",
         });
         if (response.status === 401) {
-          throw new Error('unauthorized');
+          throw new Error("unauthorized");
         }
         if (!response.ok) {
-          throw new Error('Failed to fetch todos');
+          throw new Error("Failed to fetch todos");
         }
         const data = await response.json();
         setTodoList(data.tasks);
@@ -42,104 +42,118 @@ const TodosPage = ({ token }) => {
 
   async function addTodo(todoTitle) {
     const newTodo = { id: Date.now(), title: todoTitle, isCompleted: false };
-    setTodoList(previous => [newTodo, ...previous]);
-
+    setTodoList((previous) => [newTodo, ...previous]);
+    setError("");
     try {
-      const response = await fetch('/api/tasks', {
-        method: 'POST',
+      const response = await fetch("/api/tasks", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ title: todoTitle, isCompleted: false }),
       });
       if (!response.ok) {
-        throw new Error('Failed to add todo');
+        throw new Error("Failed to add todo");
       }
 
       const data = await response.json();
-      console.log('Add todo response:', data);
+      console.log("Add todo response:", data);
 
-     const savedTodo = data.task ?? data;
+      const savedTodo = data.task ?? data;
 
-      setTodoList(previous => previous.map(todo => todo.id === newTodo.id ? savedTodo : todo));
-
+      setTodoList((previous) =>
+        previous.map((todo) => (todo.id === newTodo.id ? savedTodo : todo)),
+      );
     } catch (error) {
-      setTodoList(previous => previous.filter(todo => todo.id !== newTodo.id));
+      setTodoList((previous) =>
+        previous.filter((todo) => todo.id !== newTodo.id),
+      );
       setError(error.message);
     }
   }
   async function completeTodo(id) {
-    const originalTodo = todoList.find(todo => todo.id === id);
-    setTodoList(previous => 
-      previous.map(todo => 
-        todo.id === id ? { ...todo, isCompleted: true } : todo)
+    const originalTodo = todoList.find((todo) => todo.id === id);
+    setTodoList((previous) =>
+      previous.map((todo) =>
+        todo.id === id ? { ...todo, isCompleted: true } : todo,
+      ),
     );
+    setError("");
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ isCompleted: true }),
       });
       if (!response.ok) {
-        throw new Error('Failed to complete todo');
+        throw new Error("Failed to complete todo");
       }
     } catch (error) {
-      setTodoList(previous => 
-        previous.map(todo => 
-          todo.id === id ? originalTodo : todo)
+      setTodoList((previous) =>
+        previous.map((todo) => (todo.id === id ? originalTodo : todo)),
       );
       setError(error.message);
     }
   }
 
   async function updateTodo(editedTodo) {
-    const originalTodo = todoList.find(todo => todo.id === editedTodo.id);
-    setTodoList(previous => 
-      previous.map(todo => 
-        todo.id === editedTodo.id ? { ...todo,  editedTodo } : todo)
+    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
+    setTodoList((previous) =>
+      previous.map((todo) =>
+        todo.id === editedTodo.id
+          ? {
+              ...todo,
+              title: editedTodo.title,
+              isCompleted: editedTodo.isCompleted,
+            }
+          : todo,
+      ),
     );
-
+    setError("");
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
-        body: JSON.stringify({ 
+        credentials: "include",
+        body: JSON.stringify({
           title: editedTodo.title,
-          isCompleted: editedTodo.isCompleted}),
+          isCompleted: editedTodo.isCompleted,
+        }),
       });
       if (!response.ok) {
-        throw new Error('Failed to update todo');
+        throw new Error("Failed to update todo");
       }
     } catch (error) {
-      setTodoList(previous => 
-        previous.map(todo => 
-          todo.id === originalTodo.id ? originalTodo : todo)
+      setTodoList((previous) =>
+        previous.map((todo) =>
+          todo.id === originalTodo.id ? originalTodo : todo,
+        ),
       );
       setError(error.message);
     }
   }
   return (
-   <div>
-      {error && (
-        <div>
-          <p style={{ color: 'red' }}>{error}</p>
-          <button onClick={() => setError('')}>Clear Error</button>
-        </div>
-      )}
+    <div>
+      <section aria-label="Todo status meaasges">
+        {error && (
+          <div>
+            <p style={{ color: "red" }}>{error}</p>
+            <button onClick={() => setError("")}>Clear Error</button>
+          </div>
+        )}
 
-      {isTodoListLoading && <p>Loading todos...</p>}
-
+        {isTodoListLoading && <p>Loading todos...</p>}
+      </section>
       <TodoForm onAddTodo={addTodo} />
       <TodoList
         todoList={todoList}
@@ -148,6 +162,6 @@ const TodosPage = ({ token }) => {
       />
     </div>
   );
-}
+};
 
-export default TodosPage
+export default TodosPage;

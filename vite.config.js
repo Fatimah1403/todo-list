@@ -14,7 +14,6 @@ export default ({ mode }) => {
           target: env.VITE_TARGET,
           secure: false,
           changeOrigin: true,
-          rejectUnauthorized: false,
           configure: (proxy) => {
             proxy.on('proxyRes', (proxyRes) => {
               const cookies = proxyRes.headers['set-cookie'];

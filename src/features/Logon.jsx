@@ -1,10 +1,10 @@
 import { useState } from 'react';
-const Logon = ({ onSetEmail , onSetToken }) => {
+const Logon = ({ onSetEmail= () => {}, onSetToken = () => {} }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoggingOn(true);
