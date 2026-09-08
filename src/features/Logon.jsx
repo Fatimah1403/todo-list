@@ -1,5 +1,5 @@
 import { useState } from 'react';
-const Logon = ({ onSetEmail= () => {}, onSetToken = () => {} }) => {
+const Logon = ({ onSetEmail, onSetToken }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');

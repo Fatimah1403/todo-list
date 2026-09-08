@@ -5,12 +5,12 @@ import Logon from './features/Logon';
 import './App.css';
 
 function App() {
-  const [email, setEmail] = useState('');
+  const [, setEmail] = useState('');
   const [token, setToken] = useState('');
 
   return (
     <div>
-     <Header/>
+     <Header token={token} onSetToken={setToken} onSetEmail={setEmail} />
      
     {token ? (
       <TodosPage token={token} />

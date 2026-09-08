@@ -34,6 +34,7 @@ const TodosPage = ({ token }) => {
         setError(error.message);
       } finally {
         setIsTodoListLoading(false);
+        
       }
     };
 
@@ -45,6 +46,7 @@ const TodosPage = ({ token }) => {
     setTodoList((previous) => [newTodo, ...previous]);
     setError("");
     try {
+      setIsTodoListLoading(true);
       const response = await fetch("/api/tasks", {
         method: "POST",
         headers: {
@@ -59,18 +61,23 @@ const TodosPage = ({ token }) => {
       }
 
       const data = await response.json();
-      console.log("Add todo response:", data);
 
       const savedTodo = data.task ?? data;
-
       setTodoList((previous) =>
-        previous.map((todo) => (todo.id === newTodo.id ? savedTodo : todo)),
-      );
+        previous.map((todo) => {
+          if (todo.id === newTodo.id) {
+            return { ...todo, id: savedTodo.id };
+          }
+          return todo;
+        }
+      ))
     } catch (error) {
       setTodoList((previous) =>
         previous.filter((todo) => todo.id !== newTodo.id),
       );
       setError(error.message);
+    } finally {
+      setIsTodoListLoading(false);
     }
   }
   async function completeTodo(id) {
@@ -83,6 +90,7 @@ const TodosPage = ({ token }) => {
     setError("");
 
     try {
+      setIsTodoListLoading(true);
       const response = await fetch(`/api/tasks/${id}`, {
         method: "PATCH",
         headers: {
@@ -100,6 +108,8 @@ const TodosPage = ({ token }) => {
         previous.map((todo) => (todo.id === id ? originalTodo : todo)),
       );
       setError(error.message);
+    } finally {
+      setIsTodoListLoading(false);
     }
   }
 
@@ -118,6 +128,7 @@ const TodosPage = ({ token }) => {
     );
     setError("");
     try {
+      setIsTodoListLoading(true);
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
         method: "PATCH",
         headers: {
@@ -140,6 +151,8 @@ const TodosPage = ({ token }) => {
         ),
       );
       setError(error.message);
+    } finally {
+      setIsTodoListLoading(false);
     }
   }
   return (
