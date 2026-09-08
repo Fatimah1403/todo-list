@@ -16,7 +16,6 @@ export function AuthProvider({ children }) {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [name, setName] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (userEmail, password) => {
     try {
@@ -29,7 +28,6 @@ export function AuthProvider({ children }) {
 
       const res = await fetch('/api/users/logon', options);
       const data = await res.json();
-      console.log({data});
 
 
       if (res.status === 200 && data.email && data.csrfToken) {
@@ -74,13 +72,11 @@ export function AuthProvider({ children }) {
         apiSuccess = false;
         }
     } catch (error) {
-        console.error('Logout API error:', error);
         apiSuccess = false;
     } finally {
         setEmail('');
         setToken('');
         setName('');
-        setIsAuthenticated(false);
     }
 
     return apiSuccess

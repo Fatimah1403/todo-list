@@ -19,7 +19,7 @@ const TodosPage = () => {
   const [searchParams] = useSearchParams();
   
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-  const statusFilter = searchParams.get('status') || 'all';
+  const statusFilter = searchParams.get('status') || 'active';
 
   
   const {
@@ -37,7 +37,7 @@ const TodosPage = () => {
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
 
   useEffect(() => {
-    
+
     if (!token) return;
 
     const fetchTodos = async () => {
