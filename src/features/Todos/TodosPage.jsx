@@ -64,7 +64,7 @@ const TodosPage = () => {
         const isFilterError = !!(
           debouncedFilterTerm ||
           sortBy !== 'createdAt' ||
-          sortDirection !== 'desc'
+          sortDirection !== 'asc'
         );
 
         dispatch({
@@ -120,7 +120,7 @@ const TodosPage = () => {
   }
 
   async function completeTodo(id) {
-
+    const originalTodo = todoList.find(todo => todo.id === id);
     dispatch({
       type: TODO_ACTIONS.COMPLETE_TODO_START,
       payload: { id },
@@ -143,12 +143,19 @@ const TodosPage = () => {
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
-        payload: { message: error.message },
+        payload: {
+          message: error.message,
+          originalTodo,
+        },
       });
     }
   }
 
   async function updateTodo(editedTodo) {
+    const originalTodo = todoList.find(
+    todo => todo.id === editedTodo.id
+  );
+
 
     dispatch({
       type: TODO_ACTIONS.UPDATE_TODO_START,
@@ -175,7 +182,10 @@ const TodosPage = () => {
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_ERROR,
-        payload: { message: error.message },
+        payload: {
+          message: error.message,
+          originalTodo, 
+        },
       });
     }
   }
