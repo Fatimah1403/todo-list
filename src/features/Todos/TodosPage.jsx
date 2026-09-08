@@ -42,11 +42,14 @@ const TodosPage = ({ token }) => {
   }, [token]);
 
   async function addTodo(todoTitle) {
-    const newTodo = { id: Date.now(), title: todoTitle, isCompleted: false };
+    const newTodo = {
+       id: Date.now(), 
+       title: todoTitle, 
+       isCompleted: false };
+
     setTodoList((previous) => [newTodo, ...previous]);
     setError("");
     try {
-      setIsTodoListLoading(true);
       const response = await fetch("/api/tasks", {
         method: "POST",
         headers: {
@@ -64,21 +67,16 @@ const TodosPage = ({ token }) => {
 
       const savedTodo = data.task ?? data;
       setTodoList((previous) =>
-        previous.map((todo) => {
-          if (todo.id === newTodo.id) {
-            return { ...todo, id: savedTodo.id };
-          }
-          return todo;
-        }
-      ))
+        previous.map((todo) =>
+          todo.id === newTodo.id ? savedTodo : todo
+        )
+      );
     } catch (error) {
       setTodoList((previous) =>
         previous.filter((todo) => todo.id !== newTodo.id),
       );
       setError(error.message);
-    } finally {
-      setIsTodoListLoading(false);
-    }
+    } 
   }
   async function completeTodo(id) {
     const originalTodo = todoList.find((todo) => todo.id === id);
@@ -90,7 +88,6 @@ const TodosPage = ({ token }) => {
     setError("");
 
     try {
-      setIsTodoListLoading(true);
       const response = await fetch(`/api/tasks/${id}`, {
         method: "PATCH",
         headers: {
@@ -108,9 +105,7 @@ const TodosPage = ({ token }) => {
         previous.map((todo) => (todo.id === id ? originalTodo : todo)),
       );
       setError(error.message);
-    } finally {
-      setIsTodoListLoading(false);
-    }
+    } 
   }
 
   async function updateTodo(editedTodo) {
@@ -128,7 +123,6 @@ const TodosPage = ({ token }) => {
     );
     setError("");
     try {
-      setIsTodoListLoading(true);
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
         method: "PATCH",
         headers: {
@@ -151,13 +145,11 @@ const TodosPage = ({ token }) => {
         ),
       );
       setError(error.message);
-    } finally {
-      setIsTodoListLoading(false);
-    }
+    } 
   }
   return (
     <div>
-      <section aria-label="Todo status meaasges">
+      <section aria-label="Todo status messages">
         {error && (
           <div>
             <p style={{ color: "red" }}>{error}</p>
