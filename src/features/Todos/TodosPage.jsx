@@ -19,8 +19,6 @@ const TodosPage = ({ token }) => {
 
  const invalidateCache = useCallback(() => {
     // console.log('Invalidating memo cache after todo mutation');
-    
-
     setDataVersion(prev => prev + 1);
   }, []);
 
@@ -58,10 +56,11 @@ const TodosPage = ({ token }) => {
           throw new Error('Failed to fetch todos');
         }
         const data = await response.json();
+
         setTodoList(data.tasks);
-        
         setFilterError('');
         setError('')
+
       } catch (error) {
         if (
           debouncedFilterTerm ||
@@ -199,6 +198,7 @@ const TodosPage = ({ token }) => {
               setSortBy('createdAt');
               setSortDirection('desc');
               setFilterError('');
+              setError('');
             }}
           >
             Reset Filters
