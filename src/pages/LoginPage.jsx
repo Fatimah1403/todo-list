@@ -32,8 +32,10 @@ function LoginPage() {
 
     if (!result.success) {
       setAuthError(result.error);
+      setIsLoggingOn(false);
+      return;
     }
-
+    navigate(from, { replace: true });
     setIsLoggingOn(false);
   }
 
