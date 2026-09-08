@@ -4,7 +4,7 @@ const Logon = ({ onSetEmail , onSetToken }) => {
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
-
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoggingOn(true);
