@@ -37,6 +37,7 @@ const TodosPage = () => {
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
 
   useEffect(() => {
+    
     if (!token) return;
 
     const fetchTodos = async () => {
