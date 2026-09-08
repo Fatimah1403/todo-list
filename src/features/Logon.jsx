@@ -13,9 +13,7 @@ const Logon = () => {
     setIsLoggingOn(true);
     setAuthError('');
 
-   
     const result = await login(userEmail, password);
-
     if (!result.success) {
       setAuthError(result.error);
     }
