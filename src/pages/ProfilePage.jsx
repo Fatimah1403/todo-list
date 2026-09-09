@@ -58,6 +58,14 @@ function ProfilePage() {
         stats.total > 0
             ? Math.round((stats.completed / stats.total) * 100)
             : 0;
+    if (!token || !isAuthenticated) {
+    return (
+        <div>
+        <h2>Profile</h2>
+        <p>Please log in to view your profile and todo statistics.</p>
+        </div>
+    );
+    }
     return (
         <div>
             <h2>Profile</h2>

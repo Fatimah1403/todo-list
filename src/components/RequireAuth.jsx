@@ -17,7 +17,7 @@ function RequireAuth({ children }) {
     }
   }, [isAuthenticated, navigate, location]);
   if (!isAuthenticated) {
-    return <p>Redirecting...</p>;
+    return <p>Loading...</p>;
   }
 
   return children;

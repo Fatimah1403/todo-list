@@ -35,7 +35,6 @@ function LoginPage() {
       setIsLoggingOn(false);
       return;
     }
-    navigate(from, { replace: true });
     setIsLoggingOn(false);
   }
 

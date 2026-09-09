@@ -2,17 +2,14 @@ import { useSearchParams } from 'react-router';
 
 function StatusFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentStatus = searchParams.get('status') || 'all';
+  const currentStatus = searchParams.get('status') || 'active';
 
   const handleStatusChange = (status) => {
-    if (status === 'all') {
-      searchParams.delete('status');
-    } else {
-      searchParams.set('status', status);
-    }
-    setSearchParams(searchParams);
-  };
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set('status', status);
 
+    setSearchParams(nextSearchParams);
+  };
   return (
     <div>
       <label htmlFor='statusFilter'>Show:</label>
