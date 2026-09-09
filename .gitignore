@@ -14,6 +14,7 @@ dist-ssr
 
 # Environment variables
 .env
+/Users/fatimahhassan/Documents/CodeTheDream/react26.0_work/week1_installation/todo-list/.env
 
 # Editor directories and files
 .vscode/*
