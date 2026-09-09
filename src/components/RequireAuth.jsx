@@ -16,6 +16,7 @@ function RequireAuth({ children }) {
       });
     }
   }, [isAuthenticated, navigate, location]);
+
   if (!isAuthenticated) {
     return <p>Loading...</p>;
   }
