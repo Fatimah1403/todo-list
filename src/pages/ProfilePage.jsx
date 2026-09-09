@@ -67,36 +67,44 @@ function ProfilePage() {
     );
     }
     return (
-        <div>
-            <h2>Profile</h2>
+    <div>
+      <h2>Profile</h2>
 
-            <section>
-                <h3>Account Information</h3>
-                <p>Name: {name}</p>
-                <p>Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}</p>
-            </section>
+      <section>
+        <h3>Account Information</h3>
 
-            <section>
-                <h3>Todo Statistics</h3>
+        {/* CHANGED: provide useful account feedback in either state */}
+        <p>Name: {name || 'Not available'}</p>
 
-                {loading ? (
-                    <p>Loading statistics...</p>
-                ) : error ? (
-                    <p style={{ color: 'red' }}>{error}</p>
-                ) : (
-                    <>
-                        <p>Total Todos: {stats.total}</p>
-                        <p>Completed Todos: {stats.completed}</p>
-                        <p>Active Todos: {stats.active}</p>
+        <p>
+          Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
+        </p>
+      </section>
 
-                        {stats.total > 0 && (
-                            <p>Completion: {completionPercentage}%</p>
-                        )}
-                    </>
-                )}
-            </section>
-        </div>
-    );
+      <section>
+        <h3>Todo Statistics</h3>
+
+        {/* CHANGED: authentication is part of the page flow */}
+        {!token || !isAuthenticated ? (
+          <p>Please log in to view your todo statistics.</p>
+        ) : loading ? (
+          <p>Loading statistics...</p>
+        ) : error ? (
+          <p style={{ color: 'red' }}>{error}</p>
+        ) : (
+          <>
+            <p>Total Todos: {stats.total}</p>
+            <p>Completed Todos: {stats.completed}</p>
+            <p>Active Todos: {stats.active}</p>
+
+            {stats.total > 0 && (
+              <p>Completion: {completionPercentage}%</p>
+            )}
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
 
 export default ProfilePage;

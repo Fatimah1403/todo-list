@@ -6,14 +6,14 @@ const TodoList = ({
   onCompleteTodo,
   onUpdateTodo,
   dataVersion,
-  statusFilter = 'active',
+  statusFilter = 'all',
 }) => {
   
   const validStatuses = ['active', 'completed', 'all'];
 
   const currentStatus = validStatuses.includes(statusFilter)
     ? statusFilter
-    : 'active';
+    : 'all';
 
   const filteredTodoList = useMemo(() => {
     let filteredTodos;
