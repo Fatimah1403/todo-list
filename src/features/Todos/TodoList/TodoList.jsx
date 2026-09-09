@@ -1,39 +1,62 @@
-import TodoListItem from "./TodoListItem";
+import TodoListItem from './TodoListItem';
 import { useMemo } from 'react';
-const TodoList = ({todoList, onCompleteTodo, onUpdateTodo, dataVersion, statusFilter= 'active'}) => {
-    const filteredTodoList = useMemo(() => {
-      // console.log(`Recalculating filtered todos (v${dataVersion}) - status: ${statusFilter}`);
 
-      let filteredTodos;
-    switch (statusFilter) {
+const TodoList = ({
+  todoList,
+  onCompleteTodo,
+  onUpdateTodo,
+  dataVersion,
+  statusFilter = 'active',
+}) => {
+  
+  const validStatuses = ['active', 'completed', 'all'];
+
+  const currentStatus = validStatuses.includes(statusFilter)
+    ? statusFilter
+    : 'active';
+
+  const filteredTodoList = useMemo(() => {
+    let filteredTodos;
+
+    switch (currentStatus) {
       case 'completed':
         filteredTodos = todoList.filter((todo) => todo.isCompleted);
         break;
+
       case 'active':
         filteredTodos = todoList.filter((todo) => !todo.isCompleted);
         break;
+
       case 'all':
-      default:
         filteredTodos = todoList;
         break;
+
+      default:
+        filteredTodos = todoList.filter((todo) => !todo.isCompleted);
     }
-      return {
-        version: dataVersion,
-        todos: filteredTodos,
-      };
-  }, [todoList, dataVersion, statusFilter]);
+
+    return {
+      version: dataVersion,
+      todos: filteredTodos,
+    };
+  }, [todoList, dataVersion, currentStatus]);
 
   const getEmptyMessage = () => {
-    switch (statusFilter) {
+    switch (currentStatus) {
       case 'completed':
         return 'No completed todos yet. Complete some tasks to see them here.';
+
       case 'active':
         return 'No active todos. Add a todo above to get started.';
+
       case 'all':
-      default:
         return 'Add todo above to get started.';
+
+      default:
+        return 'No active todos. Add a todo above to get started.';
     }
   };
+
   return filteredTodoList.todos.length === 0 ? (
     <p>{getEmptyMessage()}</p>
   ) : (
@@ -48,6 +71,6 @@ const TodoList = ({todoList, onCompleteTodo, onUpdateTodo, dataVersion, statusFi
       ))}
     </ul>
   );
-}
+};
 
-export default TodoList
+export default TodoList;

@@ -48,13 +48,6 @@ const TodosPage = () => {
         if (debouncedFilterTerm) {
           paramsObject.find = debouncedFilterTerm;
         }
-
-        if (statusFilter === 'active') {
-          paramsObject.isCompleted = false;
-        } else if (statusFilter === 'completed') {
-          paramsObject.isCompleted = true;
-        }
-
         paramsObject.limit = 100;
 
 
@@ -94,7 +87,7 @@ const TodosPage = () => {
     }
 
     fetchTodos();
-  }, [token, sortBy, sortDirection, debouncedFilterTerm, statusFilter]);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm]);
 
   async function addTodo(todoTitle) {
     const tempTodo = { id: Date.now(), title: todoTitle, isCompleted: false };
