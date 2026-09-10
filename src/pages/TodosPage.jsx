@@ -19,7 +19,7 @@ const TodosPage = () => {
   const [searchParams] = useSearchParams();
   
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-const statusFilter = searchParams.get('status') || 'active';
+  const statusFilter = searchParams.get('status') || 'all';
   
   const {
     todoList,

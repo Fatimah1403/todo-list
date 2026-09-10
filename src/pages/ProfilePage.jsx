@@ -15,7 +15,11 @@ function ProfilePage() {
 
   useEffect(() => {
     async function fetchTodoStats() {
-      if (!token) return;
+      if (!token){
+        setStats({ total: 0, completed: 0, active: 0 });
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
@@ -39,7 +43,7 @@ function ProfilePage() {
 
         const data = await response.json();
         const todos = Array.isArray(data) ? data : data.tasks || [];
-        
+
         // Calculate statistics
         const total = todos.length;
         const completed = todos.filter((todo) => todo.isCompleted).length;
