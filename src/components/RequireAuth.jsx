@@ -8,7 +8,7 @@ function RequireAuth({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && location.pathname !== '/login') {
       navigate('/login', {
         replace: true,
         state: { from: location },

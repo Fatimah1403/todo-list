@@ -19,8 +19,7 @@ const TodosPage = () => {
   const [searchParams] = useSearchParams();
   
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-  const statusFilter = searchParams.get('status') || 'all';
-
+const statusFilter = searchParams.get('status') || 'active';
   
   const {
     todoList,
@@ -49,6 +48,10 @@ const TodosPage = () => {
           paramsObject.find = debouncedFilterTerm;
         }
         paramsObject.limit = 100;
+
+        if (statusFilter !== 'all') {
+          paramsObject.status = statusFilter;
+        }
 
 
         const params = new URLSearchParams(paramsObject);
@@ -87,7 +90,7 @@ const TodosPage = () => {
     }
 
     fetchTodos();
-  }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm, statusFilter]);
 
   async function addTodo(todoTitle) {
     const tempTodo = { id: Date.now(), title: todoTitle, isCompleted: false };
@@ -118,7 +121,6 @@ const TodosPage = () => {
       });
 
     } catch (error) {
-      // Remove temp todo, show error
       dispatch({
         type: TODO_ACTIONS.ADD_TODO_ERROR,
         payload: { tempId: tempTodo.id, message: error.message },
