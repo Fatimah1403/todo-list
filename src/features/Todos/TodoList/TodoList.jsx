@@ -8,17 +8,11 @@ const TodoList = ({
   dataVersion,
   statusFilter = 'all',
 }) => {
-  
-  const validStatuses = ['active', 'completed', 'all'];
-
-  const currentStatus = validStatuses.includes(statusFilter)
-    ? statusFilter
-    : 'all';
 
   const filteredTodoList = useMemo(() => {
     let filteredTodos;
 
-    switch (currentStatus) {
+    switch (statusFilter) {
       case 'completed':
         filteredTodos = todoList.filter((todo) => todo.isCompleted);
         break;
@@ -28,21 +22,19 @@ const TodoList = ({
         break;
 
       case 'all':
+      default:
         filteredTodos = todoList;
         break;
-
-      default:
-        filteredTodos = todoList.filter((todo) => !todo.isCompleted);
     }
 
     return {
       version: dataVersion,
       todos: filteredTodos,
     };
-  }, [todoList, dataVersion, currentStatus]);
+  }, [todoList, dataVersion, statusFilter]);
 
   const getEmptyMessage = () => {
-    switch (currentStatus) {
+    switch (statusFilter) {
       case 'completed':
         return 'No completed todos yet. Complete some tasks to see them here.';
 
@@ -50,10 +42,8 @@ const TodoList = ({
         return 'No active todos. Add a todo above to get started.';
 
       case 'all':
-        return 'Add todo above to get started.';
-
       default:
-        return 'No active todos. Add a todo above to get started.';
+        return 'Add todo above to get started.';
     }
   };
 

@@ -1,4 +1,3 @@
-
 export const TODO_ACTIONS = {
   // Fetch todos from API
   FETCH_START: 'FETCH_START',
@@ -42,7 +41,6 @@ export const initialTodoState = {
 
 export function todoReducer(state, action) {
   switch (action.type) {
-
     // ─── FETCH TODOS ───────────────────────────────────────────
     case TODO_ACTIONS.FETCH_START:
       return {
@@ -59,6 +57,7 @@ export function todoReducer(state, action) {
         todoList: action.payload.todos,
         error: '',
         filterError: '',
+        dataVersion: state.dataVersion + 1,
       };
 
     case TODO_ACTIONS.FETCH_ERROR:
@@ -66,24 +65,25 @@ export function todoReducer(state, action) {
         ...state,
         isTodoListLoading: false,
         error: action.payload.isFilterError ? '' : action.payload.message,
-        filterError: action.payload.isFilterError ? action.payload.message : '',
+        filterError: action.payload.isFilterError
+          ? action.payload.message
+          : '',
       };
 
     // ─── ADD TODO ──────────────────────────────────────────────
     case TODO_ACTIONS.ADD_TODO_START:
-      
       return {
         ...state,
         error: '',
         todoList: [action.payload.tempTodo, ...state.todoList],
+        dataVersion: state.dataVersion + 1,
       };
 
     case TODO_ACTIONS.ADD_TODO_SUCCESS:
-      
       return {
         ...state,
         dataVersion: state.dataVersion + 1,
-        todoList: state.todoList.map(todo =>
+        todoList: state.todoList.map((todo) =>
           todo.id === action.payload.tempId
             ? action.payload.savedTodo
             : todo
@@ -91,23 +91,22 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.ADD_TODO_ERROR:
-      
       return {
         ...state,
         error: action.payload.message,
         todoList: state.todoList.filter(
-          todo => todo.id !== action.payload.tempId
+          (todo) => todo.id !== action.payload.tempId
         ),
       };
 
     // ─── COMPLETE TODO ─────────────────────────────────────────
     case TODO_ACTIONS.COMPLETE_TODO_START:
-    
       return {
         ...state,
         error: '',
-        originalTodo: state.todoList.find(todo => todo.id === action.payload.id) || null,
-        todoList: state.todoList.map(todo =>
+        originalTodo:
+          state.todoList.find((todo) => todo.id === action.payload.id) || null,
+        todoList: state.todoList.map((todo) =>
           todo.id === action.payload.id
             ? { ...todo, isCompleted: true }
             : todo
@@ -122,12 +121,11 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.COMPLETE_TODO_ERROR:
-      
       return {
         ...state,
         error: action.payload.message,
         originalTodo: null,
-        todoList: state.todoList.map(todo =>
+        todoList: state.todoList.map((todo) =>
           todo.id === action.payload.originalTodo.id
             ? action.payload.originalTodo
             : todo
@@ -136,14 +134,14 @@ export function todoReducer(state, action) {
 
     // ─── UPDATE TODO ───────────────────────────────────────────
     case TODO_ACTIONS.UPDATE_TODO_START:
-      
       return {
         ...state,
         error: '',
-        originalTodo: state.todoList.find(
-            todo => todo.id === action.payload.editedTodo.id
-            ) || null,
-        todoList: state.todoList.map(todo =>
+        originalTodo:
+          state.todoList.find(
+            (todo) => todo.id === action.payload.editedTodo.id
+          ) || null,
+        todoList: state.todoList.map((todo) =>
           todo.id === action.payload.editedTodo.id
             ? { ...todo, ...action.payload.editedTodo }
             : todo
@@ -162,7 +160,7 @@ export function todoReducer(state, action) {
         ...state,
         originalTodo: null,
         error: action.payload.message,
-        todoList: state.todoList.map(todo =>
+        todoList: state.todoList.map((todo) =>
           todo.id === action.payload.originalTodo.id
             ? action.payload.originalTodo
             : todo

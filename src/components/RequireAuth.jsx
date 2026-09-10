@@ -8,16 +8,16 @@ function RequireAuth({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated && location.pathname !== '/login') {
+    if (!isAuthenticated) {
       navigate('/login', {
-        replace: true,
         state: { from: location },
+        replace: true,
       });
     }
   }, [isAuthenticated, navigate, location]);
 
   if (!isAuthenticated) {
-    return <p>Redirecting to login...</p>;
+    return <p>Loading...</p>;
   }
 
   return children;
