@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
           error: `Authentication failed: ${data?.message}`,
         };
       }
-    } catch (error) {
+    } catch {
       return {
         success: false,
         error: "Network error during login",
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
       if (!response.ok) {
         apiSuccess = false;
       }
-    } catch (error) {
+    } catch {
       apiSuccess = false;
     } finally {
       setEmail("");
