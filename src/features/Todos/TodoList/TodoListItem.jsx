@@ -14,6 +14,7 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) => {
 
   const handleCancel = cancelEdit;
   const handleEdit = (event) => updateTitle(event.target.value);
+  
 
   const handleUpdate = (event) => {
     if (!isEditing) return;
