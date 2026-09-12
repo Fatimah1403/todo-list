@@ -8,7 +8,7 @@ const Header = () => {
     
   return (
     <header>
-      <h1>Todo List</h1>
+      <h1 className="text-4xl font-bold text-blue-600">Todo List </h1>
       <Navigation />
       {isAuthenticated && (
         <div>
