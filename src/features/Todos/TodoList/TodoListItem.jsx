@@ -2,7 +2,7 @@ import TextInputWithLabel from '../../../shared/TextInputWithLabel';
 import { isValidTodoTitle } from '../../../utils/todoValidation';
 import { useEditableTitle } from '../../../hooks/useEditableTitle';
 
-const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
+const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) => {
   const {
     isEditing,
     workingTitle,
@@ -23,6 +23,15 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
 
     onUpdateTodo({ ...todo, title: finalTitle });
   };
+  const handleDelete = () => {
+    const shouldDelete = window.confirm(
+      `Are you sure you want to delete "${todo.title}"?`
+    );
+
+    if (shouldDelete) {
+      onDeleteTodo(todo.id);
+    }
+  };
 
   return (
     <li>
@@ -36,9 +45,7 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
               onChange={handleEdit}
               ref={null}
             />
-            <button
-              type="button"
-              onClick={handleCancel}>
+            <button type="button" onClick={handleCancel}>
               Cancel
             </button>
             <button
@@ -47,10 +54,8 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
               disabled={!isValidTodoTitle(workingTitle)}
             >
               Update
-
             </button>
           </>
-
         ) : (
           <>
             <label>
@@ -62,6 +67,21 @@ const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
               />
             </label>
             <span onClick={startEditing}>{todo.title}</span>
+            <button
+              type="button"
+              onClick={handleDelete}
+              style={{
+                marginLeft: "10px",
+                color: "white",
+                backgroundColor: "red",
+                border: "none",
+                padding: "3px 8px",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
           </>
         )}
       </form>

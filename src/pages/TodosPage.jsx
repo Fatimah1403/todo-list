@@ -234,6 +234,43 @@ const TodosPage = () => {
     }
   };
 
+  const deleteTodo = async (id) => {
+  const originalTodo = todoList.find((todo) => todo.id === id);
+
+  dispatch({
+    type: TODO_ACTIONS.DELETE_TODO_START,
+    payload: { id },
+  });
+
+  try {
+    const response = await fetch(`/api/tasks/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': token,
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete todo');
+    }
+
+    dispatch({
+      type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+      payload: { id },
+    });
+  } catch (error) {
+    dispatch({
+      type: TODO_ACTIONS.DELETE_TODO_ERROR,
+      payload: {
+        id,
+        originalTodo,
+        message: error.message,
+      },
+    });
+  }
+};
+
   return (
     <div>
       {error && (
@@ -319,6 +356,7 @@ const TodosPage = () => {
         todoList={todoList}
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
+        onDeleteTodo={deleteTodo}
         dataVersion={dataVersion}
         statusFilter={statusFilter}
       />
