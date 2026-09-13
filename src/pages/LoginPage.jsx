@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router';
-import { useAuth } from '../contexts/AuthContext';
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -8,12 +8,12 @@ function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [password, setPassword] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [authError, setAuthError] = useState('');
+  const [password, setPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [authError, setAuthError] = useState("");
   const [isLoggingOn, setIsLoggingOn] = useState(false);
 
-  const from = location.state?.from?.pathname || '/todos';
+  const from = location.state?.from?.pathname || "/todos";
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,7 +25,7 @@ function LoginPage() {
     e.preventDefault();
 
     setIsLoggingOn(true);
-    setAuthError('');
+    setAuthError("");
 
     const result = await login(userEmail, password);
 
@@ -41,11 +41,8 @@ function LoginPage() {
   return (
     <main className="flex min-h-[calc(100vh-73px)] items-center justify-center bg-slate-50 px-4 py-12">
       <section className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-lg">
-        
         <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-slate-900">
-            Welcome back
-          </h2>
+          <h2 className="text-3xl font-bold text-slate-900">Welcome back</h2>
 
           <p className="mt-2 text-sm text-slate-500">
             Sign in to manage your todos.
@@ -107,7 +104,7 @@ function LoginPage() {
             disabled={isLoggingOn}
             className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoggingOn ? 'Logging in...' : 'Log On'}
+            {isLoggingOn ? "Logging in..." : "Log On"}
           </button>
         </form>
       </section>

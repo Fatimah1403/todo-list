@@ -1,28 +1,25 @@
-import { useEffect, useReducer } from 'react';
-import { useSearchParams } from 'react-router';
+import { useEffect, useReducer } from "react";
+import { useSearchParams } from "react-router";
 
-import TodoList from '../features/Todos/TodoList/TodoList';
-import TodoForm from '../features/Todos/TodoForm';
-import SortBy from '../shared/SortBy';
-import FilterInput from '../shared/FilterInput';
-import StatusFilter from '../shared/StatusFilter';
-import useDebounce from '../utils/useDebounce';
-import { useAuth } from '../contexts/AuthContext';
+import TodoList from "../features/Todos/TodoList/TodoList";
+import TodoForm from "../features/Todos/TodoForm";
+import SortBy from "../shared/SortBy";
+import FilterInput from "../shared/FilterInput";
+import StatusFilter from "../shared/StatusFilter";
+import useDebounce from "../utils/useDebounce";
+import { useAuth } from "../hooks/useAuth";
 
 import {
   todoReducer,
   initialTodoState,
   TODO_ACTIONS,
-} from '../reducers/todoReducer';
+} from "../reducers/todoReducer";
 
 const TodosPage = () => {
   const { token } = useAuth();
   const [searchParams] = useSearchParams();
 
-  const [state, dispatch] = useReducer(
-    todoReducer,
-    initialTodoState
-  );
+  const [state, dispatch] = useReducer(todoReducer, initialTodoState);
 
   const {
     todoList,
@@ -36,7 +33,7 @@ const TodosPage = () => {
   } = state;
 
   // Get the status from the URL, default to 'all'
-  const statusFilter = searchParams.get('status') || 'all';
+  const statusFilter = searchParams.get("status") || "all";
 
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
 
@@ -58,23 +55,20 @@ const TodosPage = () => {
 
       const options = {
         headers: {
-          'X-CSRF-TOKEN': token,
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
       };
 
       try {
-        const response = await fetch(
-          `/api/tasks?${params}`,
-          options
-        );
+        const response = await fetch(`/api/tasks?${params}`, options);
 
         if (response.status === 401) {
-          throw new Error('unauthorized');
+          throw new Error("unauthorized");
         }
 
         if (!response.ok) {
-          throw new Error('Failed to fetch todos');
+          throw new Error("Failed to fetch todos");
         }
 
         const data = await response.json();
@@ -86,8 +80,8 @@ const TodosPage = () => {
       } catch (error) {
         const isFilterError = !!(
           debouncedFilterTerm ||
-          sortBy !== 'createdAt' ||
-          sortDirection !== 'desc'
+          sortBy !== "createdAt" ||
+          sortDirection !== "desc"
         );
 
         dispatch({
@@ -118,13 +112,13 @@ const TodosPage = () => {
     });
 
     try {
-      const response = await fetch('/api/tasks', {
-        method: 'POST',
+      const response = await fetch("/api/tasks", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({
           title: tempTodo.title,
           isCompleted: tempTodo.isCompleted,
@@ -132,7 +126,7 @@ const TodosPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add todo');
+        throw new Error("Failed to add todo");
       }
 
       const data = await response.json();
@@ -157,9 +151,7 @@ const TodosPage = () => {
   }
 
   const completeTodo = async (id) => {
-    const originalTodo = todoList.find(
-      (todo) => todo.id === id
-    );
+    const originalTodo = todoList.find((todo) => todo.id === id);
 
     dispatch({
       type: TODO_ACTIONS.COMPLETE_TODO_START,
@@ -168,19 +160,19 @@ const TodosPage = () => {
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({
           isCompleted: true,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to complete todo');
+        throw new Error("Failed to complete todo");
       }
 
       dispatch({
@@ -202,9 +194,7 @@ const TodosPage = () => {
   };
 
   const updateTodo = async (editedTodo) => {
-    const originalTodo = todoList.find(
-      (todo) => todo.id === editedTodo.id
-    );
+    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
 
     dispatch({
       type: TODO_ACTIONS.UPDATE_TODO_START,
@@ -212,24 +202,21 @@ const TodosPage = () => {
     });
 
     try {
-      const response = await fetch(
-        `/api/tasks/${editedTodo.id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': token,
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            title: editedTodo.title,
-            isCompleted: editedTodo.isCompleted,
-          }),
-        }
-      );
+      const response = await fetch(`/api/tasks/${editedTodo.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          title: editedTodo.title,
+          isCompleted: editedTodo.isCompleted,
+        }),
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to update todo');
+        throw new Error("Failed to update todo");
       }
 
       dispatch({
@@ -251,9 +238,7 @@ const TodosPage = () => {
   };
 
   const deleteTodo = async (id) => {
-    const originalTodo = todoList.find(
-      (todo) => todo.id === id
-    );
+    const originalTodo = todoList.find((todo) => todo.id === id);
 
     dispatch({
       type: TODO_ACTIONS.DELETE_TODO_START,
@@ -262,15 +247,15 @@ const TodosPage = () => {
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'X-CSRF-TOKEN': token,
+          "X-CSRF-TOKEN": token,
         },
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete todo');
+        throw new Error("Failed to delete todo");
       }
 
       dispatch({
@@ -292,11 +277,8 @@ const TodosPage = () => {
   return (
     <main className="min-h-[calc(100vh-73px)] bg-slate-50 px-4 py-8 sm:px-6 lg:py-10">
       <div className="mx-auto max-w-5xl">
-
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-slate-900">
-            My Todos
-          </h2>
+          <h2 className="text-3xl font-bold text-slate-900">My Todos</h2>
 
           <p className="mt-2 text-slate-500">
             Organize your tasks and keep track of your progress.
@@ -308,9 +290,7 @@ const TodosPage = () => {
             className="mb-6 flex flex-col gap-3 rounded-lg border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between"
             role="alert"
           >
-            <p className="text-sm text-red-700">
-              {error}
-            </p>
+            <p className="text-sm text-red-700">{error}</p>
 
             <button
               type="button"
@@ -331,9 +311,7 @@ const TodosPage = () => {
             className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4"
             role="alert"
           >
-            <p className="text-sm text-amber-800">
-              {filterError}
-            </p>
+            <p className="text-sm text-amber-800">{filterError}</p>
 
             <div className="mt-3 flex flex-wrap gap-2">
               <button
@@ -373,14 +351,11 @@ const TodosPage = () => {
               aria-hidden="true"
             />
 
-            <p className="text-sm text-slate-500">
-              Loading todos...
-            </p>
+            <p className="text-sm text-slate-500">Loading todos...</p>
           </div>
         )}
 
         <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          
           <div className="border-b border-slate-200 pb-6">
             <h3 className="mb-4 text-lg font-semibold text-slate-900">
               Add a Task
@@ -444,9 +419,7 @@ const TodosPage = () => {
 
           <div className="pt-6">
             <div className="mb-5">
-              <h3 className="text-lg font-semibold text-slate-900">
-                Tasks
-              </h3>
+              <h3 className="text-lg font-semibold text-slate-900">Tasks</h3>
 
               <p className="mt-1 text-sm text-slate-500">
                 Select a task to edit it or mark it as complete.
