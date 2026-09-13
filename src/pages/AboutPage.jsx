@@ -22,7 +22,7 @@ function AboutPage() {
         <section className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
           <h3 className="text-lg font-semibold text-white mb-4"> Technologies</h3>
           <div className="flex flex-wrap gap-2">
-            {['React 18', 'React Router v7', 'Vite', 'Tailwind CSS', 'useReducer', 'Context API', 'REST API'].map(tech => (
+            {['React 19', 'React Router v7', 'Vite', 'Tailwind CSS', 'useReducer', 'Context API', 'REST API'].map(tech => (
               <span key={tech} className="bg-indigo-600/20 text-indigo-300 text-xs font-medium px-3 py-1 rounded-full border border-indigo-500/30">
                 {tech}
               </span>

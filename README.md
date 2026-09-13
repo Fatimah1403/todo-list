@@ -4,8 +4,7 @@ A responsive task management application built with React that allows authentica
 
 ## Live Demo
 
-[Live Application](PRODUCTION_URL_AFTER_FINAL_MERGE)
-
+[View the live TodoList application](https://todo-list-kappa-seven-98.vercel.app)
 ## Overview
 
 TodoList is a full-featured task management application developed as part of the Code the Dream React curriculum. The project brings together component-based React development, authentication, protected routing, API integration, state management, responsive design, accessibility, security considerations, and production deployment.
@@ -262,12 +261,25 @@ Potential improvements include:
 
 ## Screenshots
 
-Screenshots of the deployed application will be added here, including:
+## Screenshots
 
-- Login page
-- Todo management dashboard
-- Profile and completion statistics
-- About page
+### Todo Management
+
+The main dashboard provides todo creation, search, filtering, sorting, completion tracking, editing, and deletion in a responsive interface.
+
+![TodoList task management dashboard](docs/screenshots/todo-dashboard.png)
+
+### Profile and Progress Tracking
+
+The profile dashboard presents authenticated account information together with real-time todo statistics and overall completion progress.
+
+![TodoList profile and progress dashboard](docs/screenshots/profile-dashboard.png)
+
+### Application Overview
+
+The About page summarizes the application's core functionality and the technologies used to build it.
+
+![TodoList About page](docs/screenshots/about-page.png)
 
 ## Project Context
 
