@@ -18,7 +18,11 @@ import {
 const TodosPage = () => {
   const { token } = useAuth();
   const [searchParams] = useSearchParams();
-  const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+
+  const [state, dispatch] = useReducer(
+    todoReducer,
+    initialTodoState
+  );
 
   const {
     todoList,
@@ -60,7 +64,10 @@ const TodosPage = () => {
       };
 
       try {
-        const response = await fetch(`/api/tasks?${params}`, options);
+        const response = await fetch(
+          `/api/tasks?${params}`,
+          options
+        );
 
         if (response.status === 401) {
           throw new Error('unauthorized');
@@ -150,7 +157,9 @@ const TodosPage = () => {
   }
 
   const completeTodo = async (id) => {
-    const originalTodo = todoList.find((todo) => todo.id === id);
+    const originalTodo = todoList.find(
+      (todo) => todo.id === id
+    );
 
     dispatch({
       type: TODO_ACTIONS.COMPLETE_TODO_START,
@@ -184,7 +193,9 @@ const TodosPage = () => {
         payload: {
           id,
           originalTodo,
-          error: error.message,
+
+          // FIXED: Reducer expects payload.message
+          message: error.message,
         },
       });
     }
@@ -201,18 +212,21 @@ const TodosPage = () => {
     });
 
     try {
-      const response = await fetch(`/api/tasks/${editedTodo.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          title: editedTodo.title,
-          isCompleted: editedTodo.isCompleted,
-        }),
-      });
+      const response = await fetch(
+        `/api/tasks/${editedTodo.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            title: editedTodo.title,
+            isCompleted: editedTodo.isCompleted,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to update todo');
@@ -228,139 +242,229 @@ const TodosPage = () => {
         payload: {
           id: editedTodo.id,
           originalTodo,
-          error: error.message,
+
+          // FIXED: Reducer expects payload.message
+          message: error.message,
         },
       });
     }
   };
 
   const deleteTodo = async (id) => {
-  const originalTodo = todoList.find((todo) => todo.id === id);
-
-  dispatch({
-    type: TODO_ACTIONS.DELETE_TODO_START,
-    payload: { id },
-  });
-
-  try {
-    const response = await fetch(`/api/tasks/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'X-CSRF-TOKEN': token,
-      },
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete todo');
-    }
+    const originalTodo = todoList.find(
+      (todo) => todo.id === id
+    );
 
     dispatch({
-      type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+      type: TODO_ACTIONS.DELETE_TODO_START,
       payload: { id },
     });
-  } catch (error) {
-    dispatch({
-      type: TODO_ACTIONS.DELETE_TODO_ERROR,
-      payload: {
-        id,
-        originalTodo,
-        message: error.message,
-      },
-    });
-  }
-};
+
+    try {
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': token,
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete todo');
+      }
+
+      dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+        payload: { id },
+      });
+    } catch (error) {
+      dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_ERROR,
+        payload: {
+          id,
+          originalTodo,
+          message: error.message,
+        },
+      });
+    }
+  };
 
   return (
-    <div>
-      {error && (
-        <div>
-          <p style={{ color: 'red' }}>{error}</p>
+    <main className="min-h-[calc(100vh-73px)] bg-slate-50 px-4 py-8 sm:px-6 lg:py-10">
+      <div className="mx-auto max-w-5xl">
 
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })
-            }
-          >
-            Clear Error
-          </button>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-slate-900">
+            My Todos
+          </h2>
+
+          <p className="mt-2 text-slate-500">
+            Organize your tasks and keep track of your progress.
+          </p>
         </div>
-      )}
 
-      {/* Filter/sort errors */}
-      {filterError && (
-        <div>
-          <p style={{ color: 'red' }}>{filterError}</p>
-
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR })
-            }
+        {error && (
+          <div
+            className="mb-6 flex flex-col gap-3 rounded-lg border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between"
+            role="alert"
           >
-            Clear Filter Error
-          </button>
+            <p className="text-sm text-red-700">
+              {error}
+            </p>
 
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({ type: TODO_ACTIONS.RESET_FILTERS })
-            }
+            <button
+              type="button"
+              onClick={() =>
+                dispatch({
+                  type: TODO_ACTIONS.CLEAR_ERROR,
+                })
+              }
+              className="self-start rounded-md border border-red-300 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 sm:self-auto"
+            >
+              Clear Error
+            </button>
+          </div>
+        )}
+
+        {filterError && (
+          <div
+            className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4"
+            role="alert"
           >
-            Reset Filters
-          </button>
-        </div>
-      )}
+            <p className="text-sm text-amber-800">
+              {filterError}
+            </p>
 
-      {isTodoListLoading && <p>Loading todos...</p>}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  dispatch({
+                    type: TODO_ACTIONS.CLEAR_FILTER_ERROR,
+                  })
+                }
+                className="rounded-md border border-amber-300 px-3 py-2 text-sm font-medium text-amber-800 transition-colors hover:bg-amber-100"
+              >
+                Clear Error
+              </button>
 
-      <SortBy
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-        onSortByChange={(newSortBy) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy: newSortBy,
-              sortDirection,
-            },
-          })
-        }
-        onSortDirectionChange={(newDirection) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy,
-              sortDirection: newDirection,
-            },
-          })
-        }
-      />
+              <button
+                type="button"
+                onClick={() =>
+                  dispatch({
+                    type: TODO_ACTIONS.RESET_FILTERS,
+                  })
+                }
+                className="rounded-md bg-amber-700 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-800"
+              >
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        )}
 
-      <StatusFilter />
+        {isTodoListLoading && (
+          <div
+            className="mb-6 flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4"
+            role="status"
+          >
+            <div
+              className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-600"
+              aria-hidden="true"
+            />
 
-      <FilterInput
-        filterTerm={filterTerm}
-        onFilterChange={(newTerm) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_FILTER,
-            payload: { filterTerm: newTerm },
-          })
-        }
-      />
+            <p className="text-sm text-slate-500">
+              Loading todos...
+            </p>
+          </div>
+        )}
 
-      <TodoForm onAddTodo={addTodo} />
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          
+          <div className="border-b border-slate-200 pb-6">
+            <h3 className="mb-4 text-lg font-semibold text-slate-900">
+              Add a Task
+            </h3>
 
-      <TodoList
-        todoList={todoList}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        onDeleteTodo={deleteTodo}
-        dataVersion={dataVersion}
-        statusFilter={statusFilter}
-      />
-    </div>
+            <TodoForm onAddTodo={addTodo} />
+          </div>
+
+          <div className="border-b border-slate-200 py-6">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-slate-900">
+                Find Your Tasks
+              </h3>
+
+              <p className="mt-1 text-sm text-slate-500">
+                Search, filter, or sort your todo list.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <FilterInput
+                filterTerm={filterTerm}
+                onFilterChange={(newTerm) =>
+                  dispatch({
+                    type: TODO_ACTIONS.SET_FILTER,
+                    payload: {
+                      filterTerm: newTerm,
+                    },
+                  })
+                }
+              />
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <StatusFilter />
+
+                <SortBy
+                  sortBy={sortBy}
+                  sortDirection={sortDirection}
+                  onSortByChange={(newSortBy) =>
+                    dispatch({
+                      type: TODO_ACTIONS.SET_SORT,
+                      payload: {
+                        sortBy: newSortBy,
+                        sortDirection,
+                      },
+                    })
+                  }
+                  onSortDirectionChange={(newDirection) =>
+                    dispatch({
+                      type: TODO_ACTIONS.SET_SORT,
+                      payload: {
+                        sortBy,
+                        sortDirection: newDirection,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="mb-5">
+              <h3 className="text-lg font-semibold text-slate-900">
+                Tasks
+              </h3>
+
+              <p className="mt-1 text-sm text-slate-500">
+                Select a task to edit it or mark it as complete.
+              </p>
+            </div>
+
+            <TodoList
+              todoList={todoList}
+              onCompleteTodo={completeTodo}
+              onUpdateTodo={updateTodo}
+              onDeleteTodo={deleteTodo}
+              dataVersion={dataVersion}
+              statusFilter={statusFilter}
+            />
+          </div>
+        </section>
+      </div>
+    </main>
   );
 };
 
