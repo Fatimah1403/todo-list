@@ -27,7 +27,7 @@ function Logoff() {
   
   return (
     <div className="flex items-center gap-2">
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
 
       <button
         type="button"
