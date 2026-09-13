@@ -28,7 +28,6 @@ function NotFoundPage() {
           >
             Go Home
           </Link>
-
           <Link
             to="/about"
             className="w-full rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
