@@ -26,13 +26,14 @@ function Logoff() {
   }
   
   return (
-    <div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="flex items-center gap-2">
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
       <button
         type="button"
         onClick={handleLogoff}
         disabled={isLoggingOff}
+        className="rounded-md border border-slate-600 px-3 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-slate-400 hover:bg-slate-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoggingOff ? 'Logging out...' : 'Log Out'}
       </button>
