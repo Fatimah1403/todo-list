@@ -173,33 +173,33 @@ export function todoReducer(state, action) {
       };
 
       // ─── DELETE TODO ────────────────────────────────────────────
-case TODO_ACTIONS.DELETE_TODO_START:
-  return {
-    ...state,
-    error: '',
-    originalTodo:
-      state.todoList.find((todo) => todo.id === action.payload.id) || null,
-    todoList: state.todoList.filter(
-      (todo) => todo.id !== action.payload.id
-    ),
-  };
+    case TODO_ACTIONS.DELETE_TODO_START:
+      return {
+        ...state,
+        error: '',
+        originalTodo:
+          state.todoList.find((todo) => todo.id === action.payload.id) || null,
+        todoList: state.todoList.filter(
+          (todo) => todo.id !== action.payload.id
+        ),
+      };
 
-case TODO_ACTIONS.DELETE_TODO_SUCCESS:
-  return {
-    ...state,
-    dataVersion: state.dataVersion + 1,
-    originalTodo: null,
-  };
+    case TODO_ACTIONS.DELETE_TODO_SUCCESS:
+      return {
+        ...state,
+        dataVersion: state.dataVersion + 1,
+        originalTodo: null,
+      };
 
-case TODO_ACTIONS.DELETE_TODO_ERROR:
-  return {
-    ...state,
-    error: action.payload.message,
-    originalTodo: null,
-    todoList: action.payload.originalTodo
-      ? [...state.todoList, action.payload.originalTodo]
-      : state.todoList,
-  };
+    case TODO_ACTIONS.DELETE_TODO_ERROR:
+      return {
+        ...state,
+        error: action.payload.message,
+        originalTodo: null,
+        todoList: action.payload.originalTodo
+          ? [...state.todoList, action.payload.originalTodo]
+          : state.todoList,
+      };
 
     // ─── UI OPERATIONS ─────────────────────────────────────────
     case TODO_ACTIONS.SET_SORT:
